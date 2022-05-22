@@ -1,3 +1,4 @@
+# Disable user password expiration
 param (
 [parameter(mandatory=$true)]
 [mailaddress]$UPN
