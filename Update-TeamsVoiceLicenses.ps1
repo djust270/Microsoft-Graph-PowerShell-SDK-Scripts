@@ -23,7 +23,7 @@ $OldSku = "BUSINESS_VOICE_MED2_TELCO"
 $NewSku = "MCOTEAMS_ESSENTIALS", "MCOMEETBASIC"
 # Get necessary permission scopes
 $perms = 'User.Read.All', 'User.ReadWrite.All', 'Directory.Read.All'
-Connect-MgGraph -UseDeviceAuthentication -ForceRefresh -Scopes $perms
+Connect-MgGraph -Scopes $perms
 Select-MgProfile beta
 
 $Skus = Get-MgSubscribedSku # Get all skus in the tenant
