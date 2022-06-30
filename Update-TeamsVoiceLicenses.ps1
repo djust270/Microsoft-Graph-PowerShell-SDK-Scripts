@@ -32,7 +32,7 @@ $OldVoiceSku = $skus | where { $_.skupartnumber -eq "$OldSku" }
 $NewVoiceSku = foreach ($Product in $NewSkus)
 {
 	$s = $skus | where { $_.skupartnumber -like "$Product" }
-	@{ SkuID = $s.ID }
+	@{ SkuID = $s.SkuId }
 }
 
 $i = 0 # Increment variable
@@ -49,7 +49,7 @@ $NeedsUpdated = $UserLicenseDetails | where { $_.LicenseDetails.SkuPartNumber -l
 foreach ($u in $NeedsUpdated)
 {
 	"Updating License assignment for {0}" -f $u.UserPrincipalName
-	Set-MgUserLicense -UserId $u.id -AddLicenses $NewVoiceSku -RemoveLicenses @($OldVoiceSku.id) #Add new license and remove old
+	Set-MgUserLicense -UserId $u.id -AddLicenses $NewVoiceSku -RemoveLicenses @($OldVoiceSku.SkuId) #Add new license and remove old
 	Start-Sleep -Milliseconds 200
 }
 
