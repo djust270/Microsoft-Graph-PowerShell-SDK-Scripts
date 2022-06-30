@@ -4,7 +4,7 @@
 	 Created with: 	SAPIEN Technologies, Inc., PowerShell Studio 2021 v5.8.195
 	 Created on:   	6/30/2022 4:18 PM
 	 Created by:   	Dave Just
-	 Filename: Update-TeamsVoiceLicenses.ps1    	
+	 Filename: Update-TeamsCallingLicenses.ps1    	
 	===========================================================================
 	.DESCRIPTION
 		Update the license assignments in AzureAD associated with Teams voice calling.
@@ -21,7 +21,6 @@ Get-CsOnlineUser | where LineUri | select Displayname, UserPrincipalName, DialPl
 # Replace with appropriate sku names
 $OldSku = "BUSINESS_VOICE_MED2_TELCO"
 $NewSku = "MCOTEAMS_ESSENTIALS", "MCOMEETBASIC"
-$NewSkuTable = $newSku | foreach { @{ SkuID = $_ } }
 # Get necessary permission scopes
 $perms = 'User.Read.All', 'User.ReadWrite.All', 'Directory.Read.All'
 Connect-MgGraph -UseDeviceAuthentication -ForceRefresh -Scopes $perms
@@ -30,7 +29,11 @@ Select-MgProfile beta
 $Skus = Get-MgSubscribedSku # Get all skus in the tenant
 $Users = Get-MGUser -All # Get all user accounts
 $OldVoiceSku = $skus | where { $_.skupartnumber -eq "$OldSku" }
-$NewVoiceSku = $skus | where { $_.skupartnumber -like "$NewSku" }
+$NewVoiceSku = foreach ($Product in $NewSkus)
+{
+	$s = $skus | where { $_.skupartnumber -like "$Product" }
+	@{ SkuID = $s.ID }
+}
 
 $i = 0 # Increment variable
 foreach ($user in $Users) # Gather license assigments for all users
@@ -46,7 +49,7 @@ $NeedsUpdated = $UserLicenseDetails | where { $_.LicenseDetails.SkuPartNumber -l
 foreach ($u in $NeedsUpdated)
 {
 	"Updating License assignment for {0}" -f $u.UserPrincipalName
-	Set-MgUserLicense -UserId $u.id -AddLicenses $NewSkuTable -RemoveLicenses @($OldVoiceSku.id)
+	Set-MgUserLicense -UserId $u.id -AddLicenses $NewVoiceSku -RemoveLicenses @($OldVoiceSku.id) #Add new license and remove old
 	Start-Sleep -Milliseconds 200
 }
 
