@@ -1,4 +1,5 @@
 # Disable user password expiration
+function Disable-MGUserPasswordExpiration{
 param (
 [parameter(mandatory=$true)]
 [mailaddress]$UPN
@@ -11,4 +12,5 @@ Invoke-MgGraphRequest -Method PATCH -Uri /v1.0/users/$userid -Body (@{"PasswordP
 }
 Catch {
 $_
+}
 }
