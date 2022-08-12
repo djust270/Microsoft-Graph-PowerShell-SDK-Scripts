@@ -1,5 +1,6 @@
 # Disable user password expiration
 function Disable-MGUserPasswordExpiration {
+[CmdletBinding()]
 param (
 [parameter(mandatory=$true)]
 [mailaddress]$UPN
