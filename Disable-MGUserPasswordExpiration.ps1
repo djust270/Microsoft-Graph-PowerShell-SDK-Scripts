@@ -1,5 +1,5 @@
 # Disable user password expiration
-function Disable-MGUserPasswordExpiration{
+function Disable-MGUserPasswordExpiration {
 param (
 [parameter(mandatory=$true)]
 [mailaddress]$UPN
