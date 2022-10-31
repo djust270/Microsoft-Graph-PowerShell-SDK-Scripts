@@ -1,5 +1,6 @@
 <#
 Author: David Just
+Website: github.com/djust270
 Date: 10/31/2022
 .SYNOPSIS
     Search managed device app inventory for specific software. Return Device info, User Info and Software Info (name/version)
