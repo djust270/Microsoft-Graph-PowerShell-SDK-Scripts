@@ -25,8 +25,5 @@ foreach ($Device in $Devices){
             SoftwareName = $Results.displayName
             SoftwareVersion = $Results.version
         }
-    }
-    else {
-        "No Results found for $SoftwareName"
-    }
+    }    
 }
