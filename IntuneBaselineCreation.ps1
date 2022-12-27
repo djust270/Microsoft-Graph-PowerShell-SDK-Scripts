@@ -6,10 +6,14 @@ Date 12/27/2022 9:00 am
 .DESCRIPTION
 Create baseline policies for a new Intune deployment using the Microsoft Graph PowerShell SDK
 #>
-# Connect to Graph
 $ErrorActionPreference = 'Stop' #Set error action to stop script execution upon error
 # Connect to graph using APP authentication. Requires global admin privelages. 
-Connect-MGGraph -Scopes Directory.ReadWrite.All,DeviceManagementConfiguration.ReadWrite.All,DeviceManagementApps.ReadWrite.All -UseDeviceAuthentication -ForceRefresh
+$Scopes = @(
+    'Directory.ReadWrite.All'
+    'DeviceManagementConfiguration.ReadWrite.All'
+    'DeviceManagementApps.ReadWrite.All'
+)
+Connect-MGGraph -Scopes $Scopes -UseDeviceAuthentication -ForceRefresh
 $TenantID = (Get-MGContext).TenantId
 $ConfigProfileURI = 'https://graph.microsoft.com/beta/deviceManagement/deviceConfigurations'
 $AdminTemplateURI = 'https://graph.microsoft.com/beta/deviceManagement/groupPolicyConfigurations'
